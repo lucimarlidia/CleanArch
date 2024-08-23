@@ -1,9 +1,10 @@
 ﻿using CleanArch.Domain.Entitidades;
 using CleanArch.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infrastructure.Repositorios
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity  // nesta classe é usada Generics
+    public class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
         protected readonly Contexto _contexto;
 
@@ -12,36 +13,39 @@ namespace CleanArch.Infrastructure.Repositorios
             _contexto = contexto;
         }
 
-        public void Incluir(T entity)
+        public async Task IncluirAsync(T entity)
         {
-            _contexto.Set<T>().Add(entity);
-            _contexto.SaveChanges();
+            await _contexto.Set<T>().AddAsync(entity);
+            await _contexto.SaveChangesAsync();
         }
 
-        public void Alterar(T entity)
+        public async Task AlterarAsync(T entity)
         {
             _contexto.Set<T>().Update(entity);
-            _contexto.SaveChanges();
-        }
-        public T Selecionar(int id)
-        {
-            return _contexto.Set<T>().FirstOrDefault(x => x.Id == id);
+            await _contexto.SaveChangesAsync();
         }
 
-        public List<T> SelecionarTudo()
+        public async Task<T> SelecionarAsync(int id)
         {
-            return _contexto.Set<T>().ToList();
+            return await _contexto.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Excluir(int id)
+        public async Task<List<T>> SelecionarTudoAsync()
         {
-            var entity = Selecionar(id);
+            return await _contexto.Set<T>().ToListAsync();
+        }
+
+        public async Task ExcluirAsync(int id)
+        {
+            var entity = await SelecionarAsync(id);
             _contexto.Set<T>().Remove(entity);
-            _contexto.SaveChanges();
+            await _contexto.SaveChangesAsync();
         }
-        public void Dispose()    // libera espaço na memória (executa o garbage colector)
+
+        public void Dispose()
         {
             _contexto.Dispose();
         }
     }
+
 }

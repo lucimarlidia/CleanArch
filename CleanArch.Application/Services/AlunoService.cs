@@ -7,22 +7,33 @@ namespace CleanArch.Application.Services
     public class AlunoService : IAlunoService
     {
         private readonly IAlunoRepository _alunoRepository;
-        public async Task Salvar(AlunoViewModel alunoViewModel)
+
+        public AlunoService(IAlunoRepository alunoRepository)
         {
+            _alunoRepository = alunoRepository;
+        }
+
+        public async Task<int> Salvar(AlunoViewModel alunoViewModel)
+        {
+            if (alunoViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(alunoViewModel));
+            }
+
             var aluno = alunoViewModel.Id != null
-                ? _alunoRepository.Selecionar(alunoViewModel.Id.Value)
+                ? await _alunoRepository.SelecionarAsync(alunoViewModel.Id.Value)
                 : null;
 
             if (aluno == null)
             {
-                InserirAluno(alunoViewModel);
-                return;
+                return await InserirAlunoAsync(alunoViewModel);
             }
-            AtualizarAluno(aluno, alunoViewModel);
+
+            return await AtualizarAlunoAsync(aluno, alunoViewModel);
         }
 
 
-        private void InserirAluno(AlunoViewModel alunoViewModel)
+        private async Task<int> InserirAlunoAsync(AlunoViewModel alunoViewModel)
         {
             var aluno = new Aluno
             {
@@ -31,15 +42,24 @@ namespace CleanArch.Application.Services
                 Email = alunoViewModel.Email,
                 Ativo = true
             };
-            _alunoRepository.Incluir(aluno);
+
+            await _alunoRepository.IncluirAsync(aluno);
+
+            // Retornar o Id do aluno recém-inserido
+            return aluno.Id;
         }
-        private void AtualizarAluno(Aluno aluno, AlunoViewModel alunoViewModel)
+
+        private async Task<int> AtualizarAlunoAsync(Aluno aluno, AlunoViewModel alunoViewModel)
         {
             aluno.Nome = alunoViewModel.Nome;
             aluno.Endereco = alunoViewModel.Endereco;
             aluno.Email = alunoViewModel.Email;
             aluno.Ativo = alunoViewModel.Ativo;
-            _alunoRepository.Alterar(aluno);
+
+            await _alunoRepository.AlterarAsync(aluno);
+
+            // Retornar o Id do aluno atualizado
+            return aluno.Id;
         }
     }
 }

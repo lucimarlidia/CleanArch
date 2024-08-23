@@ -1,5 +1,6 @@
 ﻿using CleanArch.Domain.Entitidades;
 using CleanArch.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace CleanArch.Infrastructure.Repositorios
 {
@@ -7,6 +8,13 @@ namespace CleanArch.Infrastructure.Repositorios
     {
         public CursoRepository(Contexto contexto) : base(contexto)
         {
+        }
+
+        public async Task<Curso> SelecionarComMatriculasAsync(int id)
+        {
+            return await _contexto.Set<Curso>()
+                .Include(c => c.Matriculas) // Carrega as matrículas associadas
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 }

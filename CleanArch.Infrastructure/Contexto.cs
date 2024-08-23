@@ -13,6 +13,7 @@ namespace CleanArch.Infrastructure
 
         public Contexto(DbContextOptions<Contexto> options) : base(options)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

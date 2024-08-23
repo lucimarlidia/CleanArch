@@ -2,13 +2,14 @@
 {
     public interface IBaseRepository<T>
     {
-        void Incluir(T entity);
+        Task IncluirAsync(T entity);
 
-        void Alterar(T entity);
-        T Selecionar(int id);
+        Task AlterarAsync(T entity);
 
-        List<T> SelecionarTudo();
+        Task<T> SelecionarAsync(int id);
 
-        void Excluir(int id);
+        Task<List<T>> SelecionarTudoAsync();
+
+        Task ExcluirAsync(int id);
     }
 }

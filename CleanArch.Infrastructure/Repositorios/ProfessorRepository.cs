@@ -8,10 +8,5 @@ namespace CleanArch.Infrastructure.Repositorios
         public ProfessorRepository(Contexto contexto) : base(contexto)
         {
         }
-
-        public Professor SelecionarPorId(int id)
-        {
-            return _contexto.Professor.FirstOrDefault(x => x.Id == id);
-        }
     }
 }

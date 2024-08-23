@@ -15,11 +15,23 @@ namespace CleanArch.API.Controllers
             _service = service;
         }
 
-
         [HttpPost]
-        public void Post([FromBody] AlunoViewModel alunoViewModel)
+        public async Task<IActionResult> Post([FromBody] AlunoViewModel alunoViewModel)
         {
-            _service.Salvar(alunoViewModel);
+            if (alunoViewModel == null)
+            {
+                return BadRequest("Dados inválidos.");
+            }
+
+            try
+            {
+                var alunoId = await _service.Salvar(alunoViewModel);
+                return Ok(new { Message = "Aluno salvo com sucesso!", AlunoId = alunoId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao salvar o aluno: {ex.Message}");
+            }
         }
     }
 }

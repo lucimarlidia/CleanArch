@@ -5,6 +5,6 @@ namespace CleanArch.Application.Services
 {
     public interface IAlunoService
     {
-        Task Salvar(AlunoViewModel alunoViewModel);
+        Task<int> Salvar(AlunoViewModel alunoViewModel);
     }
 }
