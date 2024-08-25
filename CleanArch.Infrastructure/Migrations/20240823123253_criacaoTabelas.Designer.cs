@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArch.Infrastructure.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240822023951_Inicio")]
-    partial class Inicio
+    [Migration("20240823123253_criacaoTabelas")]
+    partial class criacaoTabelas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

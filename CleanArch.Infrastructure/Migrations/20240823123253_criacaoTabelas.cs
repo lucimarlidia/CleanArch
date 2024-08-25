@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CleanArch.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Inicio : Migration
+    public partial class criacaoTabelas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
